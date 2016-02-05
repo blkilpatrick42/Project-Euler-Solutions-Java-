@@ -1,0 +1,85 @@
+//A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
+//
+//Find the largest palindrome made from the product of two 3-digit numbers.
+package eulerapplication;
+
+public class problem4 {
+
+    public static int solve(int digits) {
+        int max = (int) Math.pow((double) produceMaxFromDigits(digits), 2);
+        for (int i = max; i > 0; i--) {
+            if (isPalindrome(i) && !problem3.isPrime(i)) {
+                if (hasTwoDivisors(i, digits)) {
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+
+    //checks to see if the given inNumber is a palindromic number
+
+    public static boolean isPalindrome(int inNumber) {
+        System.out.print("\n\nChecking: " + inNumber);
+        String checker = String.valueOf(inNumber);
+        char[] checkArray = checker.toCharArray();
+        int max = checkArray.length - 1;
+        int begin = 0;
+        while (checkArray[begin] == checkArray[max]) {
+            if (max > begin) {
+                begin++;
+                max--;
+            } else {
+                System.out.println("\nIs a palindrome");
+                return true;
+
+            }
+        }
+        System.out.println("\nIs not a palindrome");
+        return false;
+    }
+
+    //recursive function for creating an integer that is the largest number possible
+    //of a certain number of digits
+
+    public static int produceMaxFromDigits(int digits) {
+        if (digits == 1) {
+            return 9;
+        } else {
+            return (int) (9 * Math.pow((double) 10, (double) digits - 1)) + produceMaxFromDigits(digits - 1);
+        }
+    }
+
+    //returns the number of digits a number has
+
+    public static int checkDigits(int checkNumber) {
+        int division = 1;
+        int digits = 0;
+        for (int i = 0; division > 0; i++) {
+            division = checkNumber / (int) Math.pow(10.0, (double) i);
+            digits = i;
+        }
+        return digits;
+    }
+
+    //finds two n digit divisors for the given number
+
+    public static boolean hasTwoDivisors(int number, int digits) {
+        int divisor = 0;
+        boolean flag = false;
+        boolean flag2 = false;
+        for (int i = produceMaxFromDigits(digits); i > 0; i--) {
+            if (number % i == 0 && checkDigits(i) == digits) {
+                System.out.print("\n" + i + " is a factor...");
+                divisor = number / i;
+                if (checkDigits(divisor) == digits) {
+                    System.out.print("\n as well as " + divisor);
+                    System.out.print("\n therefore " + number + " has two " + digits + " digit multiples.");
+                    return true;
+                }
+            }
+        }
+        System.out.print("\n...But does not have two " + digits + " digit multiples.");
+        return false;
+    }
+}
