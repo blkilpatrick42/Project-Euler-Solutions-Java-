@@ -1,0 +1,150 @@
+//The prime factors of 13195 are 5, 7, 13 and 29.
+//
+//What is the largest prime factor of the number 600851475143 ?
+
+//SOME RESULTS TO CONSIDER:
+//When I started by creating a list of primes, and then finding the 
+//greatest of this list that is a factor of the given number (600851475143)
+//the runtimes for using trial division vs the sieve of eratosthenes are
+// 5:32 minutes and 3:30 minutes respectively.
+//
+//In the function solve2, the approach was to instead check every number
+//below the square root of the number, starting at the square root and
+//proceeding down, until one was found that was both a
+//factor and prime. This solution's runtime was 5:42 minutes.
+//
+//
+package eulerapplication;
+import java.util.ArrayList;
+import java.util.LinkedList;
+public class problem3 {
+    public static long solve(long n){
+        long largestPrime;
+        ArrayList primeList = new ArrayList();
+        long nr = (long)Math.sqrt(n);
+        primeList = trialDivision(nr,false,0);
+        for(int i = primeList.size()-1; i>0; i--){
+            largestPrime = (long)primeList.get(i);
+            if(n % largestPrime == 0){
+                return largestPrime;
+            }
+        }
+        return 0;
+    }
+    public static long solve2(long n){
+        return findGreatestPrimeFactor(n);
+    }
+    public static long findGreatestPrimeFactor(long n){
+        long sn = (long)Math.sqrt(n);
+        for(long i = sn-1; sn > 1; i--){
+            System.out.println("checking " + i);
+            if(isPrime(i) && n % i == 0){
+                return i;
+            }
+        }
+        return 0;
+    }
+    //finds all the primes up to the given long 'end'
+    //using trial division
+    //Modifications were made for problem 7, which
+    //also requires a list of prime numbers.
+    //when boolean 'stop' is true, the method will
+    //find stopAt number of primes instead of
+    //primes up to end.
+    public static ArrayList  trialDivision(long end, boolean stop, int stopAt){
+        ArrayList primeList = new ArrayList();
+        if(!stop){
+            for(int i = 2; i <= end; i++){
+                if(isPrime(i)){
+                    System.out.println(i+" added");
+                    primeList.add((long)i);
+                }
+            }
+        }
+        else{
+            int i = 2;
+            while(true){
+                if(isPrime(i)){
+                System.out.println(i+" added");
+                primeList.add((long)i);
+                    if(primeList.size()==stopAt){
+                        break;
+                    }
+                }
+                i++;
+            }
+        }
+        System.out.println(primeList.toString());
+        return primeList;
+    }
+    //checks if a number is prime using trial division
+    public static boolean isPrime(long n){
+        for(int i = 2; i < n; i++){
+            if(n == 2){
+                return true;
+            }
+            else if(n % i == 0){
+                return false;
+            }
+        }
+        return true;
+    }
+    //implementation of the sieve of Eratosthenes
+    //finds all the primes up to the given long 'end'
+    public static ArrayList sieveOfEratosthenes(long end){
+        int stopChecker = 0;
+        boolean repeat = true;
+        ArrayList<intNode> initList = new ArrayList();
+        //create list of consecutive integers
+        for(long i=2; i<=end; i++){
+            intNode a = new intNode(i);
+            initList.add(a);
+            System.out.println(i+" added");
+        }
+        long p = 2L;
+        long start = 2L;
+        long yMark = 0L;
+        long oldP = 0L;
+        while(repeat){
+            System.out.print("\n----------------------");
+            System.out.print("\n P = "+p);
+            System.out.print("\n Start = "+start);
+            for(long i = start; i < initList.size(); i = i + p){
+                initList.get((int)i).marked = true;
+                System.out.print("\n Marked "+initList.get((int)i).localInt);
+             }
+            oldP = p;
+            for(long y = yMark + 1; y < initList.size(); y++){
+                if(!initList.get((int)y).marked){
+                    yMark = y;
+                    p = initList.get((int)y).localInt;
+                    start = y + p;
+                    stopChecker++;
+                    break;
+                }
+            }
+            
+            if(p == oldP){
+                repeat = false;
+            
+            }
+        }
+        ArrayList primeList = new ArrayList();
+        for(long x = 0L; x < initList.size(); x++){
+            if(!initList.get((int)x).marked){
+                primeList.add(initList.get((int)x).localInt);
+            }
+        }
+        System.out.println(primeList.toString());
+        return primeList;
+        
+    }
+}
+//integer node for use with the slow sieve 
+class intNode{
+    long localInt;
+    boolean marked=false;
+    public intNode(long inInt){
+        localInt = inInt;
+    }
+}
