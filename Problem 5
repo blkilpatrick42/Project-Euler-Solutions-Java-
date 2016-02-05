@@ -1,0 +1,32 @@
+//2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+//
+//What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+//
+//RESULTS TO CONSIDER
+//Current runtime is a second over
+//20 minutes for the relevan solution.
+//Consider improving?
+package eulerapplication;
+public class problem5 {
+    public static long solve(int divisorMax){
+        long i = divisorMax;
+        while(true){
+            i+=divisorMax;
+            System.out.print("\nChecking "+i);
+            if(divisibleBy(i, divisorMax)){
+                
+                return i;
+            }
+        }
+    }
+    public static boolean divisibleBy(long number, int divisorMax){
+        for(int i = 1; i < divisorMax; i++){
+            if(number % i != 0){
+                System.out.print("\n...not divisible by "+i);
+                return false;
+            }
+        }
+        return true;
+    }
+    
+}
