@@ -1,0 +1,27 @@
+//If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
+//
+//Find the sum of all the multiples of 3 or 5 below 1000.
+package eulerapplication;
+
+public class problem1 {
+    public static int solve(int upTo) {
+        int total = 0;
+        int counter = 0;
+        boolean flag1 = false;
+        boolean flag2 = false;
+        for(counter = 1; counter < upTo; counter++){
+            if(counter % 3 == 0){
+                flag1 = true;
+            }
+            if(counter % 5 == 0){
+                flag2 = true;
+            }
+            if(!(flag1&&flag2)&&flag1||flag2){
+                total+=counter;
+            }
+            flag1 = false;
+            flag2 = false;
+        }
+        return total;
+    }
+}
